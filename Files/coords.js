@@ -53,6 +53,50 @@ function bakeLayers(data, webmap, bounds){
     console.info("done baking pipenet")
     return return_dat
 }
+//------------------------------------------------------------
+
+function bakeLayers2(data, webmap, bounds){
+    var mapjson = data.map;
+    var pipenetjson = data.pipenet;
+    var return_dat = {"mapOpt":{},"pipenet":{}};
+
+    for(var thing in mapjson){
+        var URL = mapjson[thing].url;
+        var zlevel = mapjson[thing].z;
+        var name = mapjson[thing].name;
+        var image = L.imageOverlay(URL, bounds[0]);
+        var zname = "Base Map";
+
+        if(zlevel == 1){
+            image.addTo(webmap);
+        }
+        if(name){
+            zname = name;
+        }else if(mapjson.length > 1){
+            zname = "Deck "+zlevel;
+        }
+        return_dat.mapOpt[zname] = image; // {mapOpt:{"z1":"imageOverlay"}}
+    }
+    console.info("done baking map");
+    if(pipenetjson.length == 0){ //early return because pipenetjson length is 0 
+        console.info("no pipenet found, skipping pipenet baking");
+        return return_dat
+    }
+    for(var thing in pipenetjson){
+        var URL = pipenetjson[thing].url;
+        var zlevel = pipenetjson[thing].z;
+		//pipenetjson[thing].size
+        var image = L.imageOverlay(URL, bounds[zlevel-1]); //do not add pipelayers yet
+        var zname = pipenetjson[thing].name;
+        if(URL == "" || URL == undefined){
+            continue
+        }
+        return_dat.pipenet[zname] = image; // {pipeOpt:{"z1":"imageOverlay"}
+    }
+    console.info("done baking pipenet")
+    return return_dat
+}
+
 /**
  * Attatch webmap listiners
  * @param {L.map} webmap -  The leaflet L.map()

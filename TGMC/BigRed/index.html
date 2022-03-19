@@ -28,7 +28,8 @@
     <link rel="stylesheet" href="../../Files/css/leaflet.min.css">
     <!-- Import scripts-->
     <script src="../../Files/leaflet.js"></script>
-    <script src="../../Files/coords.min.js"></script>
+    <!--<script src="../../Files/coords.min.js"></script>-->
+	<script src="../../Files/coords.js"></script>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-115958323-1"></script>
@@ -56,15 +57,54 @@
     <div id="layer2"></div>
     <div id="layer3"></div>
     <div id="webmap"></div>
+	
     <script type="text/javascript">
+        const bounds = [[0, 0], [-215, 225]];
+		const bounds2 = [
+		[[0, 0], [-215, 225]]
+		,[[-80, 104], [-104, 75]]
+		,[[-121, 134], [-146, 110]]
+		,[[-121, 134], [-146, 110]]];
+        const map_config = {
+            "center": [-128, 128], "zoom": 4,
+            "crs": L.CRS.Simple
+        };
+        const image_config = {
+            "map":[{"z":1, "name": "Upper Level", "url":"https://drive.google.com/uc?export=download&id=1zlh3dveVPmTmVJ2vPAQ2Jghbsy7qYu9U"}],            
+			
+			"pipenet":[
+                {"z":2, "name": "Центр 1", "url":"https://drive.google.com/uc?export=download&id=1tOVEhcyrZG_ZGDjHnY8e-U9ipl_8ZzKS"},
+                {"z":2, "name": "Центр 2", "url":"https://drive.google.com/uc?export=download&id=1-cyNQb3W9koKixWCKvJNJg_099UsbNmj"},
+				{"z":3, "name": "Атмосферная 1", "url":"https://drive.google.com/uc?export=download&id=1-6tIToQ56wlZmEBffTidUGfSpxHkC3Mv"},
+                {"z":3, "name": "Атмосферная 2", "url":"https://drive.google.com/uc?export=download&id=1sCA4ySHLKHLFY2e1eZI7ZEIgkQZtfgFa"},
+				{"z":4, "name": "Атмосферная 1", "url":"https://drive.google.com/uc?export=download&id=1ZzlYhQOuF6hQ0vYJ90wfGgS7TWPH-ov2"},
+                {"z":4, "name": "Атмосферная 2", "url":"https://drive.google.com/uc?export=download&id=1q_U-Vqv4Nba8wnELumoY0l4ZtbSdBwG4"}
+            ]
+        };
+		
+        var webmap = L.map('webmap', map_config);
+        webmap.fitBounds(bounds2[0]);
+        webmap.setMaxBounds(bounds2[0]);
+        webmap.attributionControl.setPrefix('SS13 WebMap by AffectedArc07');
+
+        var lazylayers = bakeLayers2(image_config, webmap, bounds2);
+        console.info(lazylayers);
+        L.control.layers(lazylayers.mapOpt, lazylayers.pipenet).addTo(webmap);
+        attachListener(webmap, bounds2[0]);
+    </script>
+<! --
+<script type="text/javascript">
         const bounds = [[0, 0], [-215, 225]];
         const map_config = {
             "center": [-128, 128], "zoom": 4,
             "crs": L.CRS.Simple
         };
         const image_config = {
-            "map":[{"z":1,"url":"https://mocha.affectedarc07.co.uk/webmap/tgmc/bigred/BigRed_v2-1.png"}],
-            "pipenet":[{"z":1,"url":"https://mocha.affectedarc07.co.uk/webmap/tgmc/bigred/BigRed_v2-1-pipe.png"}]
+            "map":[{"z":1, "name": "Upper Level1", "url":"https://mocha.affectedarc07.co.uk/webmap/tgmc/bigred/BigRed_v2-1.png"}],
+            "pipenet":[
+			{"z":1, "name": "Upper Level1", "url":"https://mocha.affectedarc07.co.uk/webmap/tgmc/bigred/BigRed_v2-1-pipe.png"},
+			{"z":2, "name": "main", "url":"https://drive.google.com/uc?export=download&id=1iRwbPHCZPqFUCUqA8sKspHB0OGjwYV_X"}
+			]
         };
 
         var webmap = L.map('webmap', map_config);
@@ -76,7 +116,8 @@
         console.info(lazylayers);
         L.control.layers(lazylayers.mapOpt, lazylayers.pipenet).addTo(webmap);
         attachListener(webmap, bounds);
-    </script>
+    </script>	
+	--> 
 </body>
 
 </html>
